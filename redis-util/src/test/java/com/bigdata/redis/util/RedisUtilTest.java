@@ -1,5 +1,6 @@
 package com.bigdata.redis.util;
 
+import com.bigdata.redis.conf.RedisConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {RedisConfig.class})
 @TestPropertySource(locations = {"classpath:redis-config.properties"})
-class SentinelRedisUtilTest {
+class RedisUtilTest {
 
     @Autowired
     RedisUtil redisUtil;
