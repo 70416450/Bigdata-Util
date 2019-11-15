@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2019/11/15 10:35
  * @describe Redis工具类
  */
+@Component
 @SuppressWarnings("all")
 public class RedisUtil {
 
