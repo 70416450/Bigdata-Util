@@ -10,6 +10,7 @@
     <modules>
         <module>hdfs-util</module>
         <module>redis-util</module>
+        <module>shell-util</module>
     </modules>
     <packaging>pom</packaging>
 
