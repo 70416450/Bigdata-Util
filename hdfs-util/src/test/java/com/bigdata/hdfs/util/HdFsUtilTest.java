@@ -5,10 +5,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @SpringBootTest()
@@ -67,10 +70,34 @@ class HdFsUtilTest {
 
     @Test
     void fileRename() {
-        boolean fileRename = hdFsUtil.fileRename("/myTest/core-site.xml","/myTest/core-site1.xml");
+        boolean fileRename = hdFsUtil.fileRename("/myTest/core-site.xml", "/myTest/core-site1.xml");
         System.out.println(fileRename);
     }
 
+    @Test
+    void storeFileFromOthers() {
+        boolean storeFileFromOthers = hdFsUtil.storeFileFromOthers("/myTest/core-site1.xml", "/myTest/core-site2.xml");
+        System.out.println(storeFileFromOthers);
+    }
 
 
+    @Test
+    void storeFolderFromOthers() {
+        boolean b = hdFsUtil.storeFolderFromOthers("/myTest", "/myTest1/myTest2/myTest3");
+        System.out.println(b);
+    }
+
+
+    private MockHttpServletRequest request;
+    private MockHttpServletResponse response;
+
+    @Test
+    void downloadFile() throws UnsupportedEncodingException {
+        request = new MockHttpServletRequest();
+        request.setCharacterEncoding("UTF-8");
+        request.setQueryString("=/myTest/core-site1.xml");
+        response = new MockHttpServletResponse();
+        boolean b = hdFsUtil.downloadFile("/myTest/core-site1.xml", request, response);
+        System.out.println(b);
+    }
 }
