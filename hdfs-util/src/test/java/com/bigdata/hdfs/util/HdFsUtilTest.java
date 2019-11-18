@@ -9,6 +9,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
+
 @SpringBootTest()
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {HdFsConnection.class, HdFsUtil.class})
@@ -18,8 +20,57 @@ class HdFsUtilTest {
     private HdFsUtil hdFsUtil;
 
     @Test
-    void storeInData() {
-        String s = hdFsUtil.storeInData("C:\\Users\\SMZC\\Desktop\\core-site.xml", "/myTest/core-site.xml");
+    void localDataToHdfs() {
+        String s = hdFsUtil.localDataToHdfs("D:\\core-site.xml", "/myTest/core-site.xml");
         System.out.println(s);
     }
+
+    @Test
+    void hdfsToLocalData() {
+        String s = hdFsUtil.hdfsToLocalData("/myTest/core-site.xml", "D:\\core-site1.xml");
+        System.out.println(s);
+    }
+
+
+    @Test
+    void getFileContent() {
+        String s = hdFsUtil.getFileContent("/myTest/core-site.xml");
+        System.out.println(s);
+    }
+
+    @Test
+    void createDirectory() {
+        boolean directory = hdFsUtil.createDirectory("/myTest/aa");
+        System.out.println(directory);
+    }
+
+    @Test
+    void getFileAndDirectory() {
+        List fileAndFolder = hdFsUtil.getFileAndDirectory("/myTest");
+        System.out.println(fileAndFolder);
+    }
+
+
+    @Test
+    void delete() {
+        boolean delete = hdFsUtil.delete("/myTest/aa");
+        System.out.println(delete);
+    }
+
+
+    @Test
+    void getFileSize() {
+        long fileSize = hdFsUtil.getFileSize("/myTest");
+        System.out.println(fileSize + "b");
+    }
+
+
+    @Test
+    void fileRename() {
+        boolean fileRename = hdFsUtil.fileRename("/myTest/core-site.xml","/myTest/core-site1.xml");
+        System.out.println(fileRename);
+    }
+
+
+
 }
