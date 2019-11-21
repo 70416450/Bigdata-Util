@@ -572,24 +572,29 @@ public class ShellUtil {
      * @return java.lang.String
      * @describe exec模式提交命令
      */
-    public String execCmd(String command)
+    public int execCmd(String command)
             throws Exception {
         if (session == null) {
             throw new RuntimeException("Session is null!");
         }
 
-        InputStream in = channelExec.getInputStream();
+        BufferedReader inErr = new BufferedReader(new InputStreamReader(channelExec.getErrStream()));
+
         byte[] b = new byte[1024];
 
         channelExec.setCommand(command);
         channelExec.connect();
 
-        StringBuffer buffer = new StringBuffer();
-
-        while (in.read(b) > 0) {
-            buffer.append(new String(b));
+        String lineErr;
+        while((lineErr = inErr.readLine()) != null) {
+            log.info(lineErr);
         }
 
-        return buffer.toString();
+        inErr.close();
+        int returnCode = 0;
+        if (channelExec.isClosed()) {
+            returnCode = channelExec.getExitStatus();
+        }
+        return returnCode;
     }
 }

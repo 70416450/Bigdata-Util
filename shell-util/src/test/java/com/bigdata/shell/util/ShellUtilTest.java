@@ -91,7 +91,7 @@ class ShellUtilTest {
     @Test
     void execTest() throws Exception {
         String cmd = "cd /" + ";" + "ls -al |grep home";
-        String result = shellUtil.execCmd(cmd);
+        int result = shellUtil.execCmd(cmd);
         System.out.println("---->>>"+result);
     }
 

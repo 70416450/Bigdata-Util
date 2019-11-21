@@ -10,16 +10,29 @@
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>redis-util</artifactId>
-
-
-    <properties>
-        <redis-clients.version>3.0.0</redis-clients.version>
-        <protostuff.version>1.0.8</protostuff.version>
-    </properties>
-
+    <artifactId>sqoop-util</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>com.bigdata.util</groupId>
+            <artifactId>hdfs-util</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+<!--                <exclusion>-->
+<!--                    <artifactId>commons-io</artifactId>-->
+<!--                    <groupId>commons-io</groupId>-->
+<!--                </exclusion>-->
+                <exclusion>
+                    <artifactId>javax.servlet-api</artifactId>
+                    <groupId>javax.servlet</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.bigdata.util</groupId>
+            <artifactId>shell-util</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!--************************************************************************-->
         <!-- spring start-->
         <dependency>
@@ -37,33 +50,28 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <!-- spring end-->
         <!--************************************************************************-->
 
-        <!--************************************************************************-->
-        <!--redis 及 序列化-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>${redis-clients.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dyuproject.protostuff</groupId>
-            <artifactId>protostuff-core</artifactId>
-            <version>${protostuff.version}</version>
-        </dependency>
 
-        <dependency>
-            <groupId>com.dyuproject.protostuff</groupId>
-            <artifactId>protostuff-runtime</artifactId>
-            <version>${protostuff.version}</version>
-        </dependency>
-        <!--************************************************************************-->
+<!--        <dependency>-->
+<!--            <artifactId>commons-io</artifactId>-->
+<!--            <groupId>commons-io</groupId>-->
+<!--        </dependency>-->
 
     </dependencies>
 
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
