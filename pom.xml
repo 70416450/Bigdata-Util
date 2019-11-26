@@ -13,6 +13,7 @@
         <module>shell-util</module>
         <module>sqoop-util</module>
         <module>elasticsearch-util</module>
+        <module>prometheus-util</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -40,6 +41,7 @@
         <commons-codec>1.11</commons-codec>
         <commons-io>2.6</commons-io>
         <jsch.version>0.1.54</jsch.version>
+        <prometheus.version>0.6.0</prometheus.version>
     </properties>
 
     <dependencies>
@@ -146,6 +148,33 @@
                 <groupId>commons-io</groupId>
                 <version>${commons-io}</version>
             </dependency>
+            <!--prometheus start-->
+            <dependency>
+                <groupId>io.prometheus</groupId>
+                <artifactId>simpleclient</artifactId>
+                <version>${prometheus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.prometheus</groupId>
+                <artifactId>simpleclient_hotspot</artifactId>
+                <version>${prometheus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.prometheus</groupId>
+                <artifactId>simpleclient_httpserver</artifactId>
+                <version>${prometheus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.prometheus</groupId>
+                <artifactId>simpleclient_pushgateway</artifactId>
+                <version>${prometheus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.prometheus</groupId>
+                <artifactId>simpleclient_log4j</artifactId>
+                <version>${prometheus.version}</version>
+            </dependency>
+            <!--prometheus end-->
         </dependencies>
     </dependencyManagement>
 
