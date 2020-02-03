@@ -42,10 +42,10 @@ public class HdFsConnection {
     private String nameNodes;
 
     /**
-    * @param []
-    * @return org.apache.hadoop.conf.Configuration
-    * @describe 初始化HdFs的配置Configuration
-    */
+     * @param []
+     * @return org.apache.hadoop.conf.Configuration
+     * @describe 初始化HdFs的配置Configuration
+     */
     public Configuration init() {
         Configuration con = new Configuration();
         con.set("fs.defaultFS", defaultFS);
@@ -66,11 +66,11 @@ public class HdFsConnection {
     }
 
 
-    /** 
-    * @param [path] HDFS文件路径
-    * @return org.apache.hadoop.fs.FileSystem 
-    * @describe 获取一个FileSystem实例
-    */
+    /**
+     * @param [path] HDFS文件路径
+     * @return org.apache.hadoop.fs.FileSystem
+     * @describe 获取一个FileSystem实例(系统实例)
+     */
     public FileSystem getFSConnection(String path) {
 
         String resourcePath = defaultFS + path;
@@ -79,7 +79,6 @@ public class HdFsConnection {
 
         try {
             fs = FileSystem.get(new URI(resourcePath), con, user);
-            fs = FileSystem.get(new URI(path), con, user);
         } catch (Exception e) {
             log.error("连接hdfs文件系统失败");
             e.printStackTrace();
@@ -90,60 +89,59 @@ public class HdFsConnection {
 
 
     /**
-    * @param []
-    * @return org.apache.hadoop.fs.FileSystem
-    * @describe 获取一个FileSystem实例
-    */
+     * @param []
+     * @return org.apache.hadoop.fs.FileSystem
+     * @describe 获取一个FileSystem实例(系统实例)
+     */
     public FileSystem getFSConnection() {
-
-        String resourcePath = defaultFS;
-        FileSystem fs = null;
-        Configuration con = init();
-
-        try {
-            fs = FileSystem.get(new URI(resourcePath), con, user);
-        } catch (Exception e) {
-            log.error("连接hdfs文件系统失败");
-            e.printStackTrace();
-        }
-
-        return fs;
+        return getFSConnection("");
     }
 
 
-    /** 
-    * @param [path] HDFS文件路径
-    * @return org.apache.hadoop.fs.FSDataInputStream 
-    * @describe 获取一个FSDataInputStream实例
-    */
+    /**
+     * @param [path] HDFS文件路径
+     * @return org.apache.hadoop.fs.FSDataInputStream
+     * @describe 获取一个FSDataInputStream实例(流对象)
+     */
     public FSDataInputStream getFDSConnection(String path) {
 
         String resourcePath = defaultFS + path;
         FileSystem fs;
         FSDataInputStream fds = null;
-        Configuration con = init();
-
         try {
-            fs = FileSystem.get(new URI(resourcePath), con, user);
+            fs = getFSConnection(path);
             fds = fs.open(new Path(resourcePath));
         } catch (Exception e) {
             log.error("连接hdfs文件系统失败");
             e.printStackTrace();
         }
-
         return fds;
     }
 
     /**
-    * @param [fs] 文件流
-    * @return void
-    * @describe 关闭FileSystem连接
-    */
+     * @param [fs] 文件系统
+     * @return void
+     * @describe 关闭FileSystem连接
+     */
     public static void close(FileSystem fs) {
         try {
             fs.close();
         } catch (IOException e) {
             log.error("关闭FileSystem连接失败");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @param [fds] 文件流
+     * @return void
+     * @describe 关闭FSDataInputStream连接
+     */
+    public static void close(FSDataInputStream fds) {
+        try {
+            fds.close();
+        } catch (IOException e) {
+            log.error("关闭FSDataInputStream连接失败");
             e.printStackTrace();
         }
     }

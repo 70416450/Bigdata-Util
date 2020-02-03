@@ -24,15 +24,6 @@ import java.util.List;
 @Component
 public class HdFsUtil {
 
-//    @Value("${server.host}")
-//    private String serverHost;
-//
-//    @Value("${hdfs.fs.defaultFS}")
-//    private String host;
-//
-//    @Value("${hdfs.dfs.nameservices}")
-//    private String regex;
-
     @Autowired
     private HdFsConnection hdFsConnection;
 
@@ -86,7 +77,9 @@ public class HdFsUtil {
      */
     public String getFileContent(String hdfsFilePath) {
         StringBuffer sb = null;
-        try (FSDataInputStream fds = hdFsConnection.getFDSConnection(hdfsFilePath)) {
+        FSDataInputStream fds = null;
+        try {
+            fds = hdFsConnection.getFDSConnection(hdfsFilePath);
             sb = new StringBuffer();
             byte[] buff = new byte[1024];
             int length = 0;
@@ -96,6 +89,8 @@ public class HdFsUtil {
             log.info("查询文件信息成功");
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            HdFsConnection.close(fds);
         }
         return sb.toString();
     }
@@ -139,9 +134,9 @@ public class HdFsUtil {
             if (fs.exists(path)) {
                 for (FileStatus status : fs.listStatus(path)) {
                     if (status.isDirectory()) {
-                        list.add("Directory:" + status.getPath().toString().split(hdFsConnection.getNameServices())[1]);
+                        list.add("Directory:" + status.getPath().toString().split(hdFsConnection.getDefaultFS())[1]);
                     } else {
-                        list.add("File:" + status.getPath().toString().split(hdFsConnection.getNameServices())[1]);
+                        list.add("File:" + status.getPath().toString().split(hdFsConnection.getDefaultFS())[1]);
                     }
                 }
             }
@@ -174,10 +169,10 @@ public class HdFsUtil {
     }
 
     /**
-    * @param [hdfsFilePath-->hdfs目标路径 ]
-    * @return long 
-    * @describe 获取文件大小
-    */
+     * @param [hdfsFilePath-->hdfs目标路径 ]
+     * @return long
+     * @describe 获取文件大小
+     */
     public long getFileSize(String hdfsFilePath) {
         long size = 1L;
         FileSystem fs = hdFsConnection.getFSConnection();
@@ -195,10 +190,10 @@ public class HdFsUtil {
 
 
     /**
-    * @param [srcPath-->hdfs目标原名称 , destPath-->hdfs目标新名称]
-    * @return boolean 
-    * @describe 文件重命名
-    */
+     * @param [srcPath-->hdfs目标原名称 , destPath-->hdfs目标新名称]
+     * @return boolean
+     * @describe 文件重命名
+     */
     public boolean fileRename(String srcPath, String destPath) {
         FileSystem fs = hdFsConnection.getFSConnection();
         try {
@@ -211,10 +206,10 @@ public class HdFsUtil {
     }
 
     /**
-    * @param [srcPath-->hdfs目标原名称, destPath-->hdfs目标新名称]
-    * @return boolean
-    * @describe 将其他用户的文件转储在自己的账户
-    */
+     * @param [srcPath-->hdfs目标原名称, destPath-->hdfs目标新名称]
+     * @return boolean
+     * @describe 将其他用户的文件转储在自己的账户
+     */
     public boolean storeFileFromOthers(String srcPath, String destPath) {
         FileSystem fs = hdFsConnection.getFSConnection();
         FSDataInputStream srcStream = null;
@@ -235,10 +230,10 @@ public class HdFsUtil {
     }
 
     /**
-    * @param [srcPath-->hdfs目标原名称, destPath-->hdfs目标新名称]
-    * @return boolean 
-    * @describe 将其他用户的文件或者文件夹转储在自己的账户
-    */
+     * @param [srcPath-->hdfs目标原名称, destPath-->hdfs目标新名称]
+     * @return boolean
+     * @describe 将其他用户的文件或者文件夹转储在自己的账户
+     */
     public boolean storeFolderFromOthers(String srcPath, String destPath) {
         FileSystem fs = hdFsConnection.getFSConnection();
 
@@ -276,11 +271,11 @@ public class HdFsUtil {
     }
 
     /**
-    * @param [srcPath, request]
-    * @return com.bigdata.hdfs.util.HdFsUtil.ResumeBreakPoint
-    * @describe 主要用于下载的断点续传，获取前端传递的range
-    */
-    public ResumeBreakPoint getRange(String srcPath, HttpServletRequest request) {
+     * @param [srcPath, request]
+     * @return com.bigdata.hdfs.util.HdFsUtil.ResumeBreakPoint
+     * @describe 主要用于下载的断点续传，获取前端传递的range
+     */
+    private ResumeBreakPoint getRange(String srcPath, HttpServletRequest request) {
         long startByte = 0;
         long endByte = getFileSize(srcPath) - 1;
         String range = request.getHeader("Content-Range");
@@ -316,11 +311,11 @@ public class HdFsUtil {
         return resume;
     }
 
-    /** 
-    * @param [srcPath, request, response]
-    * @return boolean 
-    * @describe 从HdFs文件系统下载文件至发送请求的用户
-    */
+    /**
+     * @param [srcPath, request, response]
+     * @return boolean
+     * @describe 从HdFs文件系统下载文件至发送请求的用户
+     */
     public boolean downloadFile(String srcPath, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
 
         FSDataInputStream fds = hdFsConnection.getFDSConnection(srcPath);

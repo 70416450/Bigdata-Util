@@ -95,11 +95,6 @@
                 <version>${bigdata.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.sqoop</groupId>
-                <artifactId>sqoop</artifactId>
-                <version>${sqoop.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.elasticsearch</groupId>
                 <artifactId>elasticsearch</artifactId>
                 <version>${elasticsearch.version}</version>

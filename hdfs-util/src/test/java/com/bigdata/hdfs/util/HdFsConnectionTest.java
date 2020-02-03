@@ -2,6 +2,7 @@ package com.bigdata.hdfs.util;
 
 import com.bigdata.hdfs.conf.HdFsConnection;
 import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileSystem;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
-
 @SpringBootTest()
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {HdFsConnection.class, HdFsUtil.class})
+@ContextConfiguration(classes = {HdFsConnection.class})
 @TestPropertySource(locations = {"classpath:hdfs.properties"})
 class HdFsConnectionTest {
 
@@ -23,20 +22,23 @@ class HdFsConnectionTest {
 
     @Test
     void getFSConnection() {
-        hdFsConnection.getFSConnection();
+        FileSystem fs = hdFsConnection.getFSConnection();
+        System.out.println(fs);
+        HdFsConnection.close(fs);
     }
 
     @Test
-    void getFSConnection1() throws IOException {
-        FSDataInputStream fds = hdFsConnection.getFDSConnection("/test/core-site.xml");
-        byte[] buff = new byte[1024];
-        int length = 0;
-
-        while ((length = fds.read(buff)) != -1) {
-            System.out.println(new String(buff, 0, length));
-        }
-        System.out.println("查询文件信息成功");
+    void getFSConnection1() {
+        FileSystem fs = hdFsConnection.getFSConnection("/");
+        System.out.println(fs);
+        HdFsConnection.close(fs);
     }
 
+    @Test
+    void getFSConnection3() {
+        FSDataInputStream fds = hdFsConnection.getFDSConnection("/aa.txt");
+        System.out.println(fds);
+        HdFsConnection.close(fds);
+    }
 
 }

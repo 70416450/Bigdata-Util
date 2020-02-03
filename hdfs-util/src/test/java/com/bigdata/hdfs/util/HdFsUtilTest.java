@@ -24,20 +24,20 @@ class HdFsUtilTest {
 
     @Test
     void localDataToHdfs() {
-        String s = hdFsUtil.localDataToHdfs("D:\\core-site.xml", "/myTest/core-site.xml");
+        String s = hdFsUtil.localDataToHdfs("D:\\cc.txt", "/myTest/cc.txt");
         System.out.println(s);
     }
 
     @Test
     void hdfsToLocalData() {
-        String s = hdFsUtil.hdfsToLocalData("/myTest/core-site.xml", "D:\\core-site1.xml");
+        String s = hdFsUtil.hdfsToLocalData("/myTest/cc.txt", "D:\\dd.txt");
         System.out.println(s);
     }
 
 
     @Test
     void getFileContent() {
-        String s = hdFsUtil.getFileContent("/myTest/core-site.xml");
+        String s = hdFsUtil.getFileContent("/myTest/cc.txt");
         System.out.println(s);
     }
 
@@ -70,13 +70,13 @@ class HdFsUtilTest {
 
     @Test
     void fileRename() {
-        boolean fileRename = hdFsUtil.fileRename("/myTest/core-site.xml", "/myTest/core-site1.xml");
+        boolean fileRename = hdFsUtil.fileRename("/myTest/cc.txt", "/myTest/dd.txt");
         System.out.println(fileRename);
     }
 
     @Test
     void storeFileFromOthers() {
-        boolean storeFileFromOthers = hdFsUtil.storeFileFromOthers("/myTest/core-site1.xml", "/myTest/core-site2.xml");
+        boolean storeFileFromOthers = hdFsUtil.storeFileFromOthers("/aa.txt", "/myTest/ee.txt");
         System.out.println(storeFileFromOthers);
     }
 
@@ -95,9 +95,9 @@ class HdFsUtilTest {
     void downloadFile() throws UnsupportedEncodingException {
         request = new MockHttpServletRequest();
         request.setCharacterEncoding("UTF-8");
-        request.setQueryString("=/myTest/core-site1.xml");
+        request.setQueryString("=/myTest/dd.txt");
         response = new MockHttpServletResponse();
-        boolean b = hdFsUtil.downloadFile("/myTest/core-site1.xml", request, response);
+        boolean b = hdFsUtil.downloadFile("/myTest/dd.txt", request, response);
         System.out.println(b);
     }
 }
