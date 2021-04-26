@@ -41,7 +41,7 @@
         <commons-collections4>4.4</commons-collections4>
         <fastjson.version>1.2.61</fastjson.version>
         <commons-codec>1.11</commons-codec>
-        <commons-io>2.6</commons-io>
+        <commons-io>2.7</commons-io>
         <jsch.version>0.1.54</jsch.version>
         <prometheus.version>0.6.0</prometheus.version>
     </properties>
